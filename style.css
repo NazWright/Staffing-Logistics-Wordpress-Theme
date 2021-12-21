@@ -808,3 +808,9 @@ svg {
   background-color: #808080;
 }
 
+a {
+	text-decoration: none;
+	font-family: Alegreya, serif;
+	color: grey;
+}
+

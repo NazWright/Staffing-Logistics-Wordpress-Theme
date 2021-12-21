@@ -18,40 +18,48 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="profile" href="https://gmpg.org/xfn/11" />
 	<?php wp_head(); ?>
+
+	<style type="text/css">
+
+		.collapse{
+			display: flex;
+			justify-content: space-between;
+			transition: .5s;
+		}
+		
+	</style>
 </head>
 
-<body <?php body_class(); ?>>
+<body>
+	<nav class="navbar navbar-light navbar-expand-lg navigation-clean-button" style="width: 100%;border-bottom: 1px solid #cdcccc;">
+		<div class="container">
+			<?php 
+				if ( has_custom_logo() ) :
+					esc_html( the_custom_logo() );
+				endif;
+			 ?> <button class="navbar-toggler" id="navbar-toggler"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+		    <div id="navcol-2" class="collapse navbar-collapse">
 
-<?php wp_body_open(); ?>
-<div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'twentynineteen' ); ?></a>
+		    	<div style="margin-left: 10px;" >
+		    		<?php 
+		        		$menu_slug = '79';
+		        		$menu_class = 'navbar-nav me-auto'; 
+		        		$menu_id='';
+		        		//if( has_nav_menu() ):
+			        		$args = array(
+			    				'menu'=> $menu_slug,
+			    				'menu_class' => $menu_class,
+			    				'menu_id'=>$menu_id,
+			        		);
+			        		wp_nav_menu( $args );
+		        		//endif;
+		    		?>
+		    	</div>
 
-		
-		<!-- checking to see If this is a single post page and the post has a featured image ? -->
-		<header id="masthead" class="<?php echo is_singular() && twentynineteen_can_show_post_thumbnail() ? 'site-header featured-image' : 'site-header'; ?>">
+		        <span class="navbar-text actions"><a class="login" href=<?php echo esc_url( wp_login_url() ); ?>>Log In</a><a class="btn btn-light action-button" role="button" href="#" style="border-radius: 11px;background: var(--bs-blue);">Sign Up</a></span>
+		    </div>
+		</div>
+	</nav>
 
-			<div class="site-branding-container">
-				<?php get_template_part( 'template-parts/header/site', 'branding' ); ?>
-			</div><!-- .site-branding-container -->
+</body>
 
-			<?php if ( is_singular() && twentynineteen_can_show_post_thumbnail() ) : ?>
-				<div class="site-featured-image">
-					<?php
-						twentynineteen_post_thumbnail();
-						the_post();
-						$discussion = ! is_page() && twentynineteen_can_show_post_thumbnail() ? twentynineteen_get_discussion_data() : null;
-
-						$classes = 'entry-header';
-					if ( ! empty( $discussion ) && absint( $discussion->responses ) > 0 ) {
-						$classes = 'entry-header has-discussion';
-					}
-					?>
-					<div class="<?php echo $classes; ?>">
-						<?php get_template_part( 'template-parts/header/entry', 'header' ); ?>
-					</div><!-- .entry-header -->
-					<?php rewind_posts(); ?>
-				</div>
-			<?php endif; ?>
-		</header><!-- #masthead -->
-
-	<div id="content" class="site-content">
