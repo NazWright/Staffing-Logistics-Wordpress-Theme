@@ -347,6 +347,37 @@ add_action('wp_enqueue_scripts', 'wpbootstrap_enqueue_styles');
 
 
 /**
+ * Checks to see if an application has been completed before rendering this form.
+ *
+ */
+
+function check_for_application_completion( $form ){
+	if(!current_user_can('subscriber') ){
+		echo "You are not allowed to view this form";
+		return;
+	}
+	$current_user = wp_get_current_user();
+	$application_id = '1';
+	$search_criteria['field_filters'][] = array('key' => 'created_by', 'value' => $current_user->ID);
+	$matched_entries = GFAPI::get_entries($application_id, $search_criteria);
+
+	// if this user has not done an application
+	if(empty($matched_entries)){
+		echo "Please complete an application prior to your onboarding";
+		return;
+	}
+	else{
+		return $form;
+	}
+}
+
+
+// onboarding packet id is 6.
+add_filter( 'gform_pre_render_6', 'check_for_application_completion' );
+
+
+
+/**
  * SVG Icons class.
  */
 require get_template_directory() . '/classes/class-twentynineteen-svg-icons.php';
